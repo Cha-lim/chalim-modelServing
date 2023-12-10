@@ -124,7 +124,6 @@ def generate_wordcloud():
     try:
         data = request.get_json()
         
-        # Specify the path where you want to save the image
         save_path = 'static/wordcloud.png'
         
         img_buffer = wordcloud(data, save_path)
