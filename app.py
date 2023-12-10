@@ -99,7 +99,7 @@ def is_model_done():
 
 
 #워드클라우드
-def save_wordcloud(data, file_path):
+def wordcloud(data, save_path=None):
     wordcloud = WordCloud(
         font_path='doc/fonts/easter.ttf',
         width=800, height=400, background_color='white',
@@ -109,19 +109,26 @@ def save_wordcloud(data, file_path):
     plt.figure(figsize=(10, 5))
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
-    plt.savefig(file_path, format='png')
+
+    if save_path:
+        plt.savefig(save_path, format='png')
+
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format='png')
+    img_buffer.seek(0)
+
+    return img_buffer
 
 @app.route('/wordcloud', methods=['POST'])
 def generate_wordcloud():
     try:
         data = request.get_json()
-
-        # Set the path where you want to save the image
-        image_path = 'static/wordcloud.png'
         
-        save_wordcloud(data, image_path)
+        # Specify the path where you want to save the image
+        save_path = 'static/wordcloud.png'
         
-        return jsonify({'image_path': image_path})
+        img_buffer = wordcloud(data, save_path)
+        return send_file(img_buffer, mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
