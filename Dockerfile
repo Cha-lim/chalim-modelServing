@@ -12,6 +12,10 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt && \
     pip install flask flask-cors wordcloud
 
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    && rm -rf /var/lib/apt/lists/*
+
 # 애플리케이션 코드 복사
 COPY . /app
 
