@@ -101,12 +101,30 @@ if __name__ == '__main__':
 
 
 
+### 워드클라우드
+# final_results.txt 매핑
+def read_text_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    return content
+
+def parse_text_content(text_content):
+    data = eval(text_content)
+    menu_entries = data.get('menuName', [])
+    mapping = {entry['origin']: entry['transcription'] for entry in menu_entries}
+    return mapping
+
+# 번역된 메뉴이름 key값으로 옮김
+def replace_keys_with_transcription(mapping, input_json):
+    result = {mapping[key]: value for key, value in input_json.items()}
+    return result
+
 #워드클라우드
 def wordcloud(data, save_path=None):
     wordcloud = WordCloud(
-        font_path='doc/fonts/easter.ttf',
+        font_path='doc/fonts/HANDotum.ttf',
         width=800, height=400, background_color='white',
-        colormap='Oranges'
+        colormap='autumn'
     ).generate_from_frequencies(data)
 
     plt.figure(figsize=(10, 5))
@@ -123,16 +141,22 @@ def wordcloud(data, save_path=None):
     return img_buffer
 
 @app.route('/wordcloud', methods=['POST'])
-def generate_wordcloud():
+def get_mapping():
     try:
-        data = request.get_json()
-        
+        input_json = request.get_json()
+        file_path = 'inference_results/final_results.txt'
+        text_content = read_text_file(file_path)
+        mapping = parse_text_content(text_content)
+
+        result = replace_keys_with_transcription(mapping, input_json)
         save_path = 'static/wordcloud.png'
-        
-        img_buffer = wordcloud(data, save_path)
+            
+        img_buffer = wordcloud(result, save_path)
         return send_file(img_buffer, mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
 if __name__ == '__main__':
     app.run(debug=True)
+
