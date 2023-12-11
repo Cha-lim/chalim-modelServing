@@ -12,7 +12,7 @@ from io import BytesIO
 app = Flask(__name__)
 CORS(app)
 
-ALLOWED_LANGUAGES = {"en", "ja", "ch"}
+ALLOWED_LANGUAGES = {"english", "japanese", "chinese"}
 
 def create_directory_structure(base_dir):
     # 디렉토리 생성

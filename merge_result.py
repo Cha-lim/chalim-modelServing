@@ -54,6 +54,13 @@ def get_completion(Query):
     return response.choices[0].message.content
 
 def error_completion(Query, Language):
+    if Language == 'english':
+        Language = '영어'
+    elif Language == 'chinese':
+        Language = '중국어'
+    elif Language == 'japanese':
+        Language = '일본어'
+
     secret_file = os.path.join('./secrets.json')
 
     with open(secret_file) as f:
@@ -66,7 +73,7 @@ def error_completion(Query, Language):
     temperature=0.1,
     max_tokens=24,
     messages=[
-        {"role": "system", "content": f"한국어에서 {Language}로 설명은 하지말고 번역만 해줘."},
+        {"role": "system", "content": f"다음 요리에 관한 단어를 한국어에서 {Language}로 설명은 하지말고 번역만 해줘."},
         {"role": "user", "content": Query},
     ]
     )
