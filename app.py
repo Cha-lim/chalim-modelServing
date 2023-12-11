@@ -96,10 +96,6 @@ def run_model(language):
 def is_model_done(results_path):
     return os.path.exists(results_path) and os.path.getsize(results_path) > 0
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 
 ### 워드클라우드
 # final_results.txt 매핑
