@@ -18,3 +18,4 @@ PyMuPDF
 Pillow>=10.0.0
 pyyaml
 paddlepaddle
+openai
