@@ -140,7 +140,9 @@ def wordcloud(data, save_path=None):
 def get_mapping():
     try:
         input_json = request.get_json()
-        file_path = 'inference_results/final_results.txt'
+        
+        base_dir = input_json.get('imageName', 'image_name_result')
+        file_path = os.path.join(base_dir, 'inference_results/final_results.txt')
         text_content = read_text_file(file_path)
         mapping = parse_text_content(text_content)
 
