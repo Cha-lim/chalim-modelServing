@@ -1,0 +1,7 @@
+---
+applications:
+- name: modelserving
+  memory: 512M
+  instances: 1
+  command: waitress-serve --port $PORT app:app
+  path: ./

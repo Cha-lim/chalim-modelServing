@@ -19,3 +19,9 @@ Pillow>=10.0.0
 pyyaml
 paddlepaddle
 openai
+flask
+flask-cors
+wordcloud
+gunicorn
+matplotlib
+waitress
