@@ -13,6 +13,8 @@ app = Flask(__name__)
 CORS(app)
 
 ALLOWED_LANGUAGES = {"english", "japanese", "chinese"}
+route = []
+
 
 def create_directory_structure(base_dir):
     # 디렉토리 생성
@@ -82,6 +84,8 @@ def run_model(language):
                     menuName.append(item)
 
             shutil.rmtree(base_dir)
+
+            route[0] = image_name_result
             return {
                 "imageName": image_name_result,
                 "menuName": menuName,
@@ -141,7 +145,7 @@ def get_mapping():
     try:
         input_json = request.get_json()
         
-        base_dir = input_json.get('imageName', 'image_name_result')
+        base_dir = input_json.get('imageName', route[0])
         file_path = os.path.join(base_dir, 'inference_results/final_results.txt')
         text_content = read_text_file(file_path)
         mapping = parse_text_content(text_content)
@@ -156,5 +160,6 @@ def get_mapping():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(port=port, debug=True)
 
