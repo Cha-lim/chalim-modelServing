@@ -20,6 +20,7 @@ def create_directory_structure(base_dir):
     # 디렉토리 생성
     os.makedirs(os.path.join(base_dir, 'image'), exist_ok=True)
     os.makedirs(os.path.join(base_dir, 'inference_results/number'), exist_ok=True)
+    route.append(os.path.join(base_dir))
 
     # 필요한 빈 파일 생성
     open(os.path.join(base_dir, 'inference_results/final_results.txt'), 'a').close()
@@ -45,7 +46,7 @@ def run_model(language):
 
     base_dir = os.path.join('.', image_name)
     create_directory_structure(base_dir)
-
+    
     image_file = request.files['imageFile']
     image_path = os.path.join(base_dir, 'image', image_name)
     try:
@@ -85,7 +86,7 @@ def run_model(language):
 
             shutil.rmtree(base_dir)
 
-            route[0] = image_name_result
+            
             return {
                 "imageName": image_name_result,
                 "menuName": menuName,
@@ -145,7 +146,7 @@ def get_mapping():
     try:
         input_json = request.get_json()
         
-        base_dir = input_json.get('imageName', route[0])
+        base_dir = input_json.get('imageName', route[-1])
         file_path = os.path.join(base_dir, 'inference_results/final_results.txt')
         text_content = read_text_file(file_path)
         mapping = parse_text_content(text_content)
