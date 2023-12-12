@@ -20,12 +20,15 @@ def create_directory_structure(base_dir):
     # 디렉토리 생성
     os.makedirs(os.path.join(base_dir, 'image'), exist_ok=True)
     os.makedirs(os.path.join(base_dir, 'inference_results/number'), exist_ok=True)
+    if route:
+        route.clear()
     route.append(os.path.join(base_dir))
 
     # 필요한 빈 파일 생성
     open(os.path.join(base_dir, 'inference_results/final_results.txt'), 'a').close()
     open(os.path.join(base_dir, 'inference_results/system_results.txt'), 'a').close()
     open(os.path.join(base_dir, 'inference_results/number/system_results.txt'), 'a').close()
+
 
     # txt 파일 생성
     open(os.path.join(base_dir, 'inference_results/number/txt'), 'a').close()
@@ -117,7 +120,7 @@ def parse_text_content(text_content):
 
 # 번역된 메뉴이름 key값으로 옮김
 def replace_keys_with_transcription(mapping, input_json):
-    result = {mapping[key]: value for key, value in input_json.items()}
+    result = {mapping[key]: value for key, value in input_json.items() if key in mapping}
     return result
 
 #워드클라우드
@@ -146,7 +149,7 @@ def get_mapping():
     try:
         input_json = request.get_json()
         
-        base_dir = input_json.get('imageName', route[-1])
+        base_dir = input_json.get('imageName', route[0])
         file_path = os.path.join(base_dir, 'inference_results/final_results.txt')
         text_content = read_text_file(file_path)
         mapping = parse_text_content(text_content)
