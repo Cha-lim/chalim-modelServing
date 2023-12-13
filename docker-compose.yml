@@ -1,0 +1,15 @@
+version: '3'
+services:
+  flask-app:
+    build:
+      context: ./chalim-modelServing
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5000"
+
+  spring-app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"

@@ -16,6 +16,7 @@ ALLOWED_LANGUAGES = {"english", "japanese", "chinese"}
 route = []
 
 
+
 def create_directory_structure(base_dir):
     # 디렉토리 생성
     os.makedirs(os.path.join(base_dir, 'image'), exist_ok=True)
@@ -87,7 +88,17 @@ def run_model(language):
                 else:
                     menuName.append(item)
 
-            shutil.rmtree(base_dir)
+            result_data = {
+            "imageName": image_name_result,
+            "menuName": menuName,
+            "price": price
+        }
+            # 결과를 final_results.txt 파일에 저장
+            with open(results_path, 'w') as file:
+                json.dump(result_data, file)
+
+
+            # shutil.rmtree(base_dir)
 
             
             return {
